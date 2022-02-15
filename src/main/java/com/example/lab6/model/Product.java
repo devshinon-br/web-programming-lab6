@@ -1,17 +1,26 @@
 package com.example.lab6.model;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.Pattern;
+import java.util.Date;
 
 @Entity
 public class Product {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;
+    @Pattern(regexp = "[a-zA-Z-'`]+[ a-zA-Z-'`]")
     private String name;
+    @DecimalMin(value = "0.0")
     private Double price;
+    @DateTimeFormat(iso= DateTimeFormat.ISO.DATE)
+    private Date dueDate;
 
     public Long getId() {
         return id;
@@ -40,12 +49,22 @@ public class Product {
         return this;
     }
 
+    public Date getDueDate() {
+        return dueDate;
+    }
+
+    public Product setDueDate(Date dueDate) {
+        this.dueDate = dueDate;
+        return this;
+    }
+
     @Override
     public String toString() {
         return "Product{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", price=" + price +
+                ", dueDate=" + dueDate +
                 '}';
     }
 }

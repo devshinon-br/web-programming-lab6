@@ -6,10 +6,13 @@ import com.example.lab6.repository.ProductRepository;
 import com.example.lab6.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.validation.Valid;
 
 @Controller
 @RequestMapping(path="/lab6")
@@ -21,7 +24,7 @@ public class LabController {
     @Autowired
     private ProductRepository productRepository;
 
-    @GetMapping(path="/add")
+    @GetMapping(path="/user")
     public @ResponseBody
     String addUser (@RequestParam String name, @RequestParam String email) {
         User n = new User();
@@ -31,12 +34,12 @@ public class LabController {
         return "User Saved";
     }
 
-    @GetMapping(path="/all")
+    @GetMapping(path="/users")
     public @ResponseBody Iterable<User> getAllUsers() {
         return userRepository.findAll();
     }
 
-    @GetMapping(path="/add-product")
+    @GetMapping(path="/product")
     public @ResponseBody
     String addProduct (@RequestParam Double price, @RequestParam String name) {
         Product n = new Product();
@@ -46,8 +49,24 @@ public class LabController {
         return "Product Saved";
     }
 
-    @GetMapping(path="/all-product")
+    @GetMapping(path="/products")
     public @ResponseBody Iterable<Product> getAllProduct() {
         return productRepository.findAll();
+    }
+
+    @GetMapping(path="/user-valid") //
+    public String addUserValid (@Valid User user, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "formUser";
+        }
+        return "result";
+    }
+
+    @GetMapping(path="/product-valid") //
+    public String addProductValid (@Valid Product product, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "formProduct";
+        }
+        return "result";
     }
 }
